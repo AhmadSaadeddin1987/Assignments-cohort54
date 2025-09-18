@@ -1,1 +1,51 @@
 /* Write your style here */
+body {
+font-family: Arial, sans-serif;
+background-color: #f8f9fa;
+padding: 20px;
+}
+
+h1 {
+text-align: center;
+color: #333;
+}
+
+ul {
+list-style: none;
+padding: 0;
+max-width: 600px;
+margin: 0 auto;
+}
+
+li {
+background-color: #fff;
+border-radius: 8px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+margin-bottom: 20px;
+padding: 15px;
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+li img {
+border-radius: 4px;
+width: 100px;
+height: auto;
+}
+
+li p {
+margin: 0;
+font-size: 16px;
+color: #732929;
+}
+.read {
+background-color: lightgreen;
+}
+.unread {
+background-color: lightcoral;
+}
+h1 {
+text-align: center;
+color: #333;
+}

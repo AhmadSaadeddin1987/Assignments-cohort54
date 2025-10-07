@@ -11,47 +11,47 @@ Full description at: https://github.com/HackYourFuture/Assignments/tree/main/3-U
 ------------------------------------------------------------------------------*/
 
 // TODO Remove callback and return a promise
-export function rollDie(callback) {
-  // Compute a random number of rolls (3-10) that the die MUST complete
-  const randomRollsToDo = Math.floor(Math.random() * 8) + 3;
-  console.log(`Die scheduled for ${randomRollsToDo} rolls...`);
+export function rollDie() {
+  return new Promise((resolve, reject) => {
+    // Compute a random number of rolls (3-10) that the die MUST complete
+    const randomRollsToDo = Math.floor(Math.random() * 8) + 3;
+    console.log(`Die scheduled for ${randomRollsToDo} rolls...`);
 
-  const rollOnce = (roll) => {
-    // Compute a random die value for the current roll
-    const value = Math.floor(Math.random() * 6) + 1;
-    console.log(`Die value is now: ${value}`);
+    const rollOnce = (roll) => {
+      // Compute a random die value for the current roll
+      const value = Math.floor(Math.random() * 6) + 1;
+      console.log(`Die value is now: ${value}`);
 
-    // Use callback to notify that the die rolled off the table after 6 rolls
-    if (roll > 6) {
-      // TODO replace "error" callback
-      callback(new Error('Oops... Die rolled off the table.'));
-    }
+      // If the die rolled more than 6 times, reject the promise
+      if (roll > 6) {
+        reject(new Error('Oops... Die rolled off the table.'));
+        return;
+      }
 
-    // Use callback to communicate the final die value once finished rolling
-    if (roll === randomRollsToDo) {
-      // TODO replace "success" callback
-      callback(null, value);
-    }
+      // If finished rolling successfully, resolve with the final value
+      if (roll === randomRollsToDo) {
+        resolve(value);
+        return;
+      }
 
-    // Schedule the next roll todo until no more rolls to do
-    if (roll < randomRollsToDo) {
+      // Schedule the next roll until no more rolls to do
       setTimeout(() => rollOnce(roll + 1), 500);
-    }
-  };
+    };
 
-  // Start the initial roll
-  rollOnce(1);
+    // Start the initial roll
+    rollOnce(1);
+  });
 }
 
 function main() {
   // TODO Refactor to use promise
-  rollDie((error, value) => {
-    if (error !== null) {
-      console.log(error.message);
-    } else {
+  rollDie()
+    .then((value) => {
       console.log(`Success! Die settled on ${value}.`);
-    }
-  });
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
 }
 
 // ! Do not change or remove the code below
@@ -60,3 +60,7 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 // TODO Replace this comment by your explanation that was asked for in the assignment description.
+/* With Promises, the computation "settles" only once. After the first resolve() or
+reject(), further calls are ignored. We also added explicit `return` statements
+right after resolve/reject to prevent any further scheduling. As a result, the
+described problem no longer occurs.*/

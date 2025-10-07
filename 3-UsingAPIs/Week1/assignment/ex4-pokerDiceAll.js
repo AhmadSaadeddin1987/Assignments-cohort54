@@ -27,9 +27,18 @@ exercise file.
 import { rollDie } from '../../helpers/pokerDiceRoller.js';
 
 export function rollDice() {
-  // TODO Refactor this function
   const dice = [1, 2, 3, 4, 5];
-  return rollDie(1);
+
+  // Create an array of Promises using .map()
+  const rollPromises = dice.map((dieNumber) =>
+    rollDie(dieNumber).catch(() => {
+      // Re-throw the error with the die number
+      throw new Error(`Die ${dieNumber} rolled off the table.`);
+    })
+  );
+
+  // Wait for all dice to settle
+  return Promise.all(rollPromises);
 }
 
 function main() {
@@ -44,3 +53,19 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 // TODO Replace this comment by your explanation that was asked for in the assignment description.
+/*
+Explanation (why other dice keep rolling after a rejection):
+
+- We start *all* five asynchronous roll operations immediately.
+- `Promise.all([...])` rejects as soon as the *first* promise rejects, but it
+  does not cancel the other, already-started operations.
+- JavaScript Promises are not cancellable by default; timers inside `rollDie`
+  (e.g. setTimeout) keep firing, so remaining dice keep logging their intermediate
+  values even after the overall `Promise.all` has already rejected.
+
+- We start *all* five asynchronous roll operations immediately.
+- `Promise.all([...])` rejects as soon as the *first* promise rejects, but it
+  does not cancel the other, already-started operations.
+- JavaScript Promises are not cancellable by default; timers inside `rollDie`
+  (e.g. setTimeout) keep firing, so remaining dice keep logging their intermediate
+  values even after the overall `Promise.all` has already rejected. */

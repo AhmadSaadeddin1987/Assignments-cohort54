@@ -17,7 +17,7 @@ import { rollDie } from '../../helpers/pokerDiceRoller.js';
 export function rollDice() {
   const results = [];
 
-  // TODO: expand the chain to include five dice
+  // Chain all five dice sequentially
   return rollDie(1)
     .then((value) => {
       results.push(value);
@@ -25,7 +25,19 @@ export function rollDice() {
     })
     .then((value) => {
       results.push(value);
-      return results;
+      return rollDie(3);
+    })
+    .then((value) => {
+      results.push(value);
+      return rollDie(4);
+    })
+    .then((value) => {
+      results.push(value);
+      return rollDie(5);
+    })
+    .then((value) => {
+      results.push(value);
+      return results; // return final array
     });
 }
 

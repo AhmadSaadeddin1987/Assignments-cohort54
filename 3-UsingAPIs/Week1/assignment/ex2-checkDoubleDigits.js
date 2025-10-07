@@ -12,7 +12,6 @@ Complete the function called `checkDoubleDigits` such that:
   number that was passed as an argument.
 ------------------------------------------------------------------------------*/
 export function checkDoubleDigits(number) {
-  // TODO complete this function
     return new Promise((resolve, reject) => {
     if (number >= 10 && number <= 99) {
       resolve("This is a double digit number!");

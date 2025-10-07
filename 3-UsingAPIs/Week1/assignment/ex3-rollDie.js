@@ -10,7 +10,6 @@ Full description at: https://github.com/HackYourFuture/Assignments/tree/main/3-U
   explanation? Add your answer as a comment to be bottom of the file.
 ------------------------------------------------------------------------------*/
 
-// TODO Remove callback and return a promise
 export function rollDie() {
   return new Promise((resolve, reject) => {
     // Compute a random number of rolls (3-10) that the die MUST complete
@@ -44,7 +43,6 @@ export function rollDie() {
 }
 
 function main() {
-  // TODO Refactor to use promise
   rollDie()
     .then((value) => {
       console.log(`Success! Die settled on ${value}.`);
@@ -59,7 +57,6 @@ if (process.env.NODE_ENV !== 'test') {
   main();
 }
 
-// TODO Replace this comment by your explanation that was asked for in the assignment description.
 /* With Promises, the computation "settles" only once. After the first resolve() or
 reject(), further calls are ignored. We also added explicit `return` statements
 right after resolve/reject to prevent any further scheduling. As a result, the

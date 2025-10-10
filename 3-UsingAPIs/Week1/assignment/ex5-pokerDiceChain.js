@@ -17,30 +17,22 @@ import { rollDie } from '../../helpers/pokerDiceRoller.js';
 export function rollDice() {
   const results = [];
 
-  // Chain all five dice sequentially
-  return rollDie(1)
-    .then((value) => {
+  // Helper function: rolls a die, stores the result, and returns the promise
+  function rollAndStore(n) {
+    return rollDie(n).then((value) => {
       results.push(value);
-      return rollDie(2);
-    })
-    .then((value) => {
-      results.push(value);
-      return rollDie(3);
-    })
-    .then((value) => {
-      results.push(value);
-      return rollDie(4);
-    })
-    .then((value) => {
-      results.push(value);
-      return rollDie(5);
-    })
-    .then((value) => {
-      results.push(value);
-      return results; // return final array
+      return value;
     });
-}
+  }
 
+  // Chain all rolls sequentially using the helper
+  return rollAndStore(1)
+    .then(() => rollAndStore(2))
+    .then(() => rollAndStore(3))
+    .then(() => rollAndStore(4))
+    .then(() => rollAndStore(5))
+    .then(() => results);
+}
 function main() {
   rollDice()
     .then((results) => console.log('Resolved!', results))

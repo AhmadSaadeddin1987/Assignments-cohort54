@@ -5,13 +5,32 @@ Use the VSCode Debugger to fix the bugs
 --------------------------------------------------------------- --------------*/
 async function getData(url) {
   const response = await fetch(url);
-  return response.json();
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error(`HTTP error: ${response.status} ${response.statusText}`);
+  }
 }
 
-function renderLaureate({ knownName, birth, death }) {
-  console.log(`\nName: ${knownName.en}`);
-  console.log(`Birth: ${birth.date}, ${birth.place.locationString}`);
-  console.log(`Death: ${death.date}, ${death.place.locationString}`);
+function renderLaureate(l) {
+  const name =
+    l?.knownName?.en || l?.fullName?.en || l?.knownName || l?.fullName || 'Unknown';
+
+  const birthDate = l?.birth?.date || 'Unknown date';
+  const birthPlace =
+    l?.birth?.place?.locationString?.en ||
+    l?.birth?.place?.locationString ||
+    'Unknown place';
+
+  const deathDate = l?.death?.date || '—';
+  const deathPlace =
+    l?.death?.place?.locationString?.en ||
+    l?.death?.place?.locationString ||
+    (l?.death ? 'Unknown place' : '—');
+
+  console.log(`\nName:  ${name}`);
+  console.log(`Birth: ${birthDate}, ${birthPlace}`);
+  console.log(`Death: ${deathDate}${deathPlace !== '—' ? ', ' + deathPlace : ''}`);
 }
 
 function renderLaureates(laureates) {
@@ -20,9 +39,10 @@ function renderLaureates(laureates) {
 
 async function fetchAndRender() {
   try {
-    const laureates = getData(
-      'http://api.nobelprize.org/2.0/laureates?birthCountry=Netherlands&format=json&csvLang=en'
+    const data = await getData(
+      'https://api.nobelprize.org/2.0/laureates?birthCountry=Netherlands&format=json&csvLang=en'
     );
+    const laureates = data?.laureates || [];
     renderLaureates(laureates);
   } catch (err) {
     console.error(`Something went wrong: ${err.message}`);
